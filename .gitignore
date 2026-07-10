@@ -3,7 +3,5 @@ node_modules/
 # Intermediate build artifacts — contain account-specific ARNs
 data/
 
-# Generated site assets — rebuilt by npm run build
-# Remove these lines if deploying to GitHub Pages without CI
-site/models.js
-site/aws-sdk.js
+# Generated site assets are committed for GitHub Pages deployment
+# (no CI pipeline to rebuild them on push)
