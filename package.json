@@ -1,0 +1,19 @@
+{
+  "name": "aws-bedrock-quota-dashboard",
+  "private": true,
+  "scripts": {
+    "fetch": "node build/fetch.js",
+    "aggregate": "node build/aggregate.js",
+    "bundle-sdk": "node build/bundle-sdk.js",
+    "build": "npm run fetch && npm run aggregate && npm run bundle-sdk"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock": "^3",
+    "@aws-sdk/client-bedrock-runtime": "^3",
+    "@aws-sdk/client-cloudwatch": "^3",
+    "@aws-sdk/client-service-quotas": "^3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25"
+  }
+}

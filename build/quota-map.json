@@ -1,0 +1,448 @@
+{
+    "ai21.jamba-1-5-large-v1:0": {
+        "On-Demand": "L-CFAB19FF"
+    },
+    "ai21.jamba-1-5-mini-v1:0": {
+        "On-Demand": "L-5A778346"
+    },
+    "amazon.nova-2-lite-v1:0": {
+        "Cross-Region": "L-C6F5908D",
+        "Global": "L-71C69B70",
+        "On-Demand": "L-70423BF8"
+    },
+    "amazon.nova-lite-v1:0": {
+        "On-Demand": "L-70423BF8",
+        "Cross-Region": "L-7C42E72A"
+    },
+    "amazon.nova-micro-v1:0": {
+        "On-Demand": "L-CFA4FA0D",
+        "Cross-Region": "L-DC7FF66C"
+    },
+    "amazon.nova-pro-v1:0": {
+        "On-Demand": "L-CE33604C",
+        "Cross-Region": "L-C0326783"
+    },
+    "amazon.titan-embed-image-v1:0": {
+        "On-Demand": "L-ABC24664"
+    },
+    "amazon.titan-embed-image-v1": {
+        "On-Demand": "L-ABC24664"
+    },
+    "amazon.titan-embed-g1-text-02": {
+        "On-Demand": "L-DE641971"
+    },
+    "amazon.titan-embed-text-v2:0": {
+        "On-Demand": "L-DE641971"
+    },
+    "anthropic.claude-3-haiku-20240307-v1:0": {
+        "On-Demand": "L-8CE99163",
+        "Cross-Region": "L-DCADBC78"
+    },
+    "anthropic.claude-3-sonnet-20240229-v1:0": {
+        "On-Demand": "L-4C35BB2A",
+        "Cross-Region": "L-5DF13F64"
+    },
+    "anthropic.claude-fable-5": {
+        "Cross-Region": "L-9B258944",
+        "Global": "L-D06938E7",
+        "On-Demand": null
+    },
+    "anthropic.claude-haiku-4-5-20251001-v1:0": {
+        "Cross-Region": "L-58BE175A",
+        "Global": "L-9A11C666",
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-4-1-20250805-v1:0": {
+        "Cross-Region": "L-BD85BFCD",
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-4-5-20251101-v1:0": {
+        "Cross-Region": "L-7007E9C9",
+        "Global": "L-3ABF6ACC",
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-4-7": {
+        "Cross-Region": "L-5DB28B7B",
+        "Global": "L-34152C1D",
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-4-8": {
+        "Cross-Region": "L-DB99DCDB",
+        "Global": "L-4FCE27C7",
+        "On-Demand": null
+    },
+    "anthropic.claude-sonnet-4-6": {
+        "Cross-Region": "L-15B8E632",
+        "Global": "L-7BEE40FB",
+        "On-Demand": null
+    },
+    "anthropic.claude-sonnet-5": {
+        "Cross-Region": "L-D4FBCF4E",
+        "Global": "L-DD84E5CA",
+        "On-Demand": null
+    },
+    "cohere.command-r-v1:0": {
+        "On-Demand": "L-17F95AA4"
+    },
+    "cohere.command-r-plus-v1:0": {
+        "On-Demand": "L-17F95AA4"
+    },
+    "cohere.embed-english-v3:0": {
+        "On-Demand": "L-A2BE277A"
+    },
+    "cohere.embed-english-v3": {
+        "On-Demand": "L-A2BE277A"
+    },
+    "cohere.embed-multilingual-v3:0": {
+        "On-Demand": "L-C2F86908"
+    },
+    "cohere.embed-multilingual-v3": {
+        "On-Demand": "L-C2F86908"
+    },
+    "cohere.embed-v4:0": {
+        "On-Demand": "L-C47B85D5",
+        "Cross-Region": "L-4C3F0FE6",
+        "Global": "L-02DFBB76"
+    },
+    "deepseek.v3.2": {
+        "On-Demand": "L-C43703DE"
+    },
+    "meta.llama3-70b-instruct-v1:0": {
+        "On-Demand": "L-609E24B0"
+    },
+    "meta.llama3-8b-instruct-v1:0": {
+        "On-Demand": "L-03A9B835"
+    },
+    "meta.llama3-1-70b-instruct-v1:0": {
+        "On-Demand": "L-100511C1",
+        "Cross-Region": "L-92E68994"
+    },
+    "meta.llama3-1-8b-instruct-v1:0": {
+        "On-Demand": "L-9E79C230",
+        "Cross-Region": "L-9782749C"
+    },
+    "meta.llama3-2-1b-instruct-v1:0": {
+        "Cross-Region": "L-BD9FDA6F"
+    },
+    "meta.llama3-2-3b-instruct-v1:0": {
+        "Cross-Region": "L-0B2687F4"
+    },
+    "meta.llama3-3-70b-instruct-v1:0": {
+        "Cross-Region": "L-0E7AA8B7",
+        "On-Demand": null
+    },
+    "minimax.minimax-m2": {
+        "On-Demand": "L-A81B7C40"
+    },
+    "minimax.minimax-m2.1": {
+        "On-Demand": "L-D795937C"
+    },
+    "minimax.minimax-m2.5": {
+        "On-Demand": "L-359D5670"
+    },
+    "mistral.ministral-3-14b-instruct": {
+        "On-Demand": "L-334E5409"
+    },
+    "mistral.mistral-7b-instruct-v0": {
+        "On-Demand": "L-02D831F1"
+    },
+    "mistral.mistral-large-3-675b-instruct": {
+        "On-Demand": "L-C709F563"
+    },
+    "moonshot.kimi-k2-thinking": {
+        "On-Demand": "L-03579AC2"
+    },
+    "moonshotai.kimi-k2.5": {
+        "On-Demand": "L-B8D04761"
+    },
+    "nvidia.nemotron-nano-3-30b": {
+        "On-Demand": "L-C0663FA3"
+    },
+    "nvidia.nemotron-super-3-120b": {
+        "On-Demand": "L-EB4CADEE"
+    },
+    "openai.gpt-oss-safeguard-120b": {
+        "On-Demand": "L-594C7AC9"
+    },
+    "openai.gpt-oss-safeguard-20b": {
+        "On-Demand": "L-5D8F2F54"
+    },
+    "openai.gpt-oss-120b-1:0": {
+        "On-Demand": "L-9DC5F595"
+    },
+    "openai.gpt-oss-20b-1:0": {
+        "On-Demand": "L-036E14D8"
+    },
+    "qwen.qwen3-coder-next": {
+        "On-Demand": "L-A4C6122D"
+    },
+    "qwen.qwen3-next-80b-a3b": {
+        "On-Demand": "L-37AB702E"
+    },
+    "qwen.qwen3-vl-235b-a22b": {
+        "On-Demand": "L-46063925"
+    },
+    "writer.palmyra-vision-7b": {
+        "On-Demand": "L-C53E98ED"
+    },
+    "zai.glm-4.7": {
+        "On-Demand": "L-12454D86"
+    },
+    "zai.glm-4.7-flash": {
+        "On-Demand": "L-B40F2E56"
+    },
+    "anthropic.claude-opus-4-6-v1": {
+        "Cross-Region": "L-0AD9BBE8",
+        "Global": "L-3DCCFAA4",
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-4-5-20251101-v1": {
+        "Cross-Region": "L-7007E9C9",
+        "Global": "L-3ABF6ACC"
+    },
+    "anthropic.claude-opus-4-1-20250805-v1": {
+        "Cross-Region": "L-BD85BFCD"
+    },
+    "anthropic.claude-sonnet-4-20250514-v1": {
+        "Cross-Region": "L-59759B4A",
+        "Global": "L-97E41E39"
+    },
+    "anthropic.claude-sonnet-4-5-20250929-v1": {
+        "Cross-Region": "L-F4DDD3EB",
+        "Global": "L-27C57EE8"
+    },
+    "anthropic.claude-haiku-4-5-20251001-v1": {
+        "Cross-Region": "L-58BE175A",
+        "Global": "L-9A11C666"
+    },
+    "meta.llama3-2-11b-instruct-v1": {
+        "Cross-Region": "L-E2D0B19E"
+    },
+    "meta.llama3-2-90b-instruct-v1": {
+        "Cross-Region": "L-41C63FF8"
+    },
+    "meta.llama3-3-70b-instruct-v1": {
+        "Cross-Region": "L-0E7AA8B7"
+    },
+    "meta.llama4-maverick-17b-instruct-v1": {
+        "On-Demand": "L-DE3FBBF4",
+        "Cross-Region": "L-DE3FBBF4"
+    },
+    "meta.llama4-scout-17b-instruct-v1": {
+        "On-Demand": "L-532E6630",
+        "Cross-Region": "L-532E6630"
+    },
+    "deepseek.r1-v1": {
+        "On-Demand": "L-06B03968",
+        "Cross-Region": "L-06B03968"
+    },
+    "mistral.pixtral-large-2502-v1": {
+        "Cross-Region": "L-4B9F76B0"
+    },
+    "mistral.mistral-large-2402-v1": {
+        "On-Demand": "L-01447289"
+    },
+    "mistral.mistral-small-2402-v1": {
+        "On-Demand": "L-82C15FA8"
+    },
+    "mistral.mixtral-8x7b-instruct-v0": {
+        "On-Demand": "L-490F4D1F"
+    },
+    "writer.palmyra-x4-v1": {
+        "Cross-Region": "L-FF1F238B"
+    },
+    "writer.palmyra-x5-v1": {
+        "Cross-Region": "L-90DFE70F"
+    },
+    "amazon.nova-premier-v1": {
+        "Cross-Region": "L-AA7FE948"
+    },
+    "amazon.nova-2-lite-v1": {
+        "Cross-Region": "L-C6F5908D",
+        "Global": "L-71C69B70"
+    },
+    "google.gemma-3-12b-it": {
+        "On-Demand": "L-3FD4A73E"
+    },
+    "google.gemma-3-4b-it": {
+        "On-Demand": "L-73FB8466"
+    },
+    "google.gemma-3-27b-it": {
+        "On-Demand": "L-F8729E94"
+    },
+    "mistral.devstral-2-123b": {
+        "On-Demand": "L-904A6762"
+    },
+    "mistral.magistral-small-2509": {
+        "On-Demand": "L-D18AC5F7"
+    },
+    "mistral.ministral-3-8b-instruct": {
+        "On-Demand": "L-3B98F300"
+    },
+    "mistral.ministral-3-3b-instruct": {
+        "On-Demand": "L-8A4BEE90"
+    },
+    "mistral.mistral-large-2402-v1:0": {
+        "On-Demand": "L-01447289"
+    },
+    "mistral.mistral-small-2402-v1:0": {
+        "On-Demand": "L-82C15FA8"
+    },
+    "qwen.qwen3-32b-v1:0": {
+        "On-Demand": "L-B7C52139"
+    },
+    "qwen.qwen3-coder-30b-a3b-v1:0": {
+        "On-Demand": "L-92F81E14"
+    },
+    "amazon.titan-embed-text-v1:2": {
+        "On-Demand": "L-74B5B793"
+    },
+    "amazon.titan-embed-text-v1": {
+        "On-Demand": "L-74B5B793"
+    },
+    "deepseek.r1-v1:0": {
+        "Cross-Region": "L-06B03968",
+        "On-Demand": null
+    },
+    "mistral.pixtral-large-2502-v1:0": {
+        "Cross-Region": "L-4B9F76B0",
+        "On-Demand": null
+    },
+    "amazon.nova-premier-v1:0": {
+        "Cross-Region": "L-AA7FE948",
+        "On-Demand": null
+    },
+    "writer.palmyra-x4-v1:0": {
+        "Cross-Region": "L-FF1F238B",
+        "On-Demand": null
+    },
+    "writer.palmyra-x5-v1:0": {
+        "Cross-Region": "L-90DFE70F",
+        "On-Demand": null
+    },
+    "anthropic.claude-sonnet-4-5-20250929-v1:0": {
+        "Cross-Region": "L-F4DDD3EB",
+        "Global": "L-27C57EE8",
+        "On-Demand": null
+    },
+    "anthropic.claude-sonnet-4-20250514-v1:0": {
+        "Cross-Region": "L-59759B4A",
+        "Global": "L-97E41E39",
+        "On-Demand": null
+    },
+    "meta.llama4-maverick-17b-instruct-v1:0": {
+        "Cross-Region": "L-DE3FBBF4",
+        "On-Demand": null
+    },
+    "meta.llama4-scout-17b-instruct-v1:0": {
+        "Cross-Region": "L-532E6630",
+        "On-Demand": null
+    },
+    "amazon.nova-2-sonic-v1:0": {
+        "On-Demand": null
+    },
+    "nvidia.nemotron-nano-12b-v2": {
+        "On-Demand": null
+    },
+    "stability.stable-creative-upscale-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "amazon.nova-2-multimodal-embeddings-v1:0": {
+        "On-Demand": null
+    },
+    "mistral.voxtral-mini-3b-2507": {
+        "On-Demand": null
+    },
+    "stability.stable-image-remove-background-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-control-sketch-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-conservative-upscale-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-search-recolor-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "twelvelabs.pegasus-1-2-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null,
+        "Global": null
+    },
+    "nvidia.nemotron-nano-9b-v2": {
+        "On-Demand": null
+    },
+    "mistral.voxtral-small-24b-2507": {
+        "On-Demand": null
+    },
+    "stability.stable-fast-upscale-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-erase-object-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-control-structure-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "twelvelabs.marengo-embed-3-0-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "twelvelabs.marengo-embed-2-7-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-outpaint-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-inpaint-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-style-guide-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-style-transfer-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "stability.stable-image-search-replace-v1:0": {
+        "On-Demand": null,
+        "Cross-Region": null
+    },
+    "amazon.nova-canvas-v1:0": {
+        "On-Demand": null
+    },
+    "amazon.nova-reel-v1:0": {
+        "On-Demand": null
+    },
+    "amazon.nova-reel-v1": {
+        "On-Demand": null
+    },
+    "amazon.nova-sonic-v1:0": {
+        "On-Demand": null
+    },
+    "cohere.rerank-v3-5:0": {
+        "On-Demand": null
+    },
+    "meta.llama3-2-11b-instruct-v1:0": {
+        "Cross-Region": null
+    },
+    "meta.llama3-2-90b-instruct-v1:0": {
+        "Cross-Region": null
+    },
+    "zai.glm-5": {
+        "On-Demand": "L-99316427"
+    }
+}

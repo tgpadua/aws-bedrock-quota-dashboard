@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Bedrock Quota Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bar-cell { min-width: 150px; }
+        .bar-wrap { position: relative; height: 18px; }
+        .bar-wrap .progress { height: 100%; }
+        .bar-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; mix-blend-mode: difference; color: #fff; pointer-events: none; }
+.vendor-group-header { cursor: pointer; background-color: var(--bs-tertiary-bg) !important; }
+        .vendor-group-header:hover { background-color: var(--bs-secondary-bg) !important; }
+        .vendor-group-header td { font-weight: 600; }
+        th.sortable { cursor: pointer; user-select: none; }
+        th.sortable:hover { opacity: 0.85; }
+        th.sortable .sort-icon { margin-left: 4px; opacity: 0.5; }
+        th.sortable.sort-active .sort-icon { opacity: 1; }
+        .theme-toggle { cursor: pointer; font-size: 1.1rem; }
+        .vr { opacity: 0.2; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Amazon Bedrock Quota Dashboard</span>
+    </div>
+</nav>
+
+<div class="container-fluid mt-3">
+
+    <!-- Top toolbar -->
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                <!-- Credentials -->
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#credentials-section" id="credentials-btn">
+                    🔑 Credentials
+                </button>
+
+                <div class="vr mx-1"></div>
+
+                <!-- Models -->
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#model-selection-section">
+                    📋 Models
+                </button>
+                <span class="text-muted small" id="model-selection-count"></span>
+
+                <div class="vr mx-1"></div>
+
+                <!-- Regions -->
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#region-selection-section">
+                    🌎 Regions
+                </button>
+                <span class="text-muted small" id="region-count-badge">0 selected</span>
+
+                <div class="vr mx-1"></div>
+
+                <!-- Type filter -->
+                <span class="small text-muted fw-semibold">Type:</span>
+                <div class="form-check form-check-inline mb-0">
+                    <input class="form-check-input" type="checkbox" id="type-on-demand" value="On-Demand" checked>
+                    <label class="form-check-label small" for="type-on-demand">On-Demand</label>
+                </div>
+                <div class="form-check form-check-inline mb-0">
+                    <input class="form-check-input" type="checkbox" id="type-cross-region" value="Cross-Region" checked>
+                    <label class="form-check-label small" for="type-cross-region">Cross-Region</label>
+                </div>
+                <div class="form-check form-check-inline mb-0">
+                    <input class="form-check-input" type="checkbox" id="type-global" value="Global" checked>
+                    <label class="form-check-label small" for="type-global">Global</label>
+                </div>
+
+                <!-- Push right -->
+                <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+                    <span class="theme-toggle text-body" id="theme-toggle" title="Toggle dark/light mode">🌙</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collapsibles -->
+    <div class="collapse mb-3" id="credentials-section">
+        <div class="card card-body">
+            <form id="credentials-form">
+                <div class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label class="form-label">Access Key ID</label>
+                        <input type="text" class="form-control form-control-sm" id="access-key-input" placeholder="AKIA...">
+                    </div>
+                    <div class="col-auto">
+                        <label class="form-label">Secret Access Key</label>
+                        <input type="password" class="form-control form-control-sm" id="secret-key-input" placeholder="Secret">
+                    </div>
+                    <div class="col-auto">
+                        <label class="form-label">Session Token <small class="text-muted">(optional)</small></label>
+                        <input type="password" class="form-control form-control-sm" id="session-token-input" placeholder="STS token">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary btn-sm">Configure</button>
+                    </div>
+                    <div class="col-auto">
+                        <span id="credentials-status" class="text-muted small"></span>
+                    </div>
+                </div>
+            </form>
+
+            <hr class="my-3">
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p class="small fw-semibold mb-1">Get temporary credentials:</p>
+                    <pre class="bg-body-secondary rounded p-2 small mb-0 user-select-all">aws sts get-session-token --output json</pre>
+                    <p class="text-muted small mt-1 mb-0">Copy <code>AccessKeyId</code>, <code>SecretAccessKey</code> and <code>SessionToken</code> from the output into the fields above.</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="small fw-semibold mb-1">Required IAM permissions:</p>
+                    <pre class="bg-body-secondary rounded p-2 small mb-0">cloudwatch:GetMetricData
+servicequotas:GetServiceQuota</pre>
+                    <p class="text-muted small mt-1 mb-0">Credentials are stored in <code>sessionStorage</code> and cleared when the tab closes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse mb-3" id="model-selection-section">
+        <div class="card card-body">
+            <div class="row g-2">
+                <div class="col">
+                    <label class="form-label fw-bold small">Available Models</label>
+                    <input type="text" class="form-control form-control-sm mb-1" id="available-search" placeholder="Filter...">
+                    <select multiple class="form-select" id="available-models" size="10" style="resize:vertical; min-height:150px;"></select>
+                </div>
+                <div class="col-auto d-flex flex-column justify-content-center gap-1">
+                    <button class="btn btn-sm btn-outline-primary" id="add-selected-models" title="Add selected">▶</button>
+                    <button class="btn btn-sm btn-outline-primary" id="add-all-models" title="Add all">▶▶</button>
+                    <button class="btn btn-sm btn-outline-secondary" id="remove-selected-models" title="Remove selected">◀</button>
+                    <button class="btn btn-sm btn-outline-secondary" id="remove-all-models" title="Remove all">◀◀</button>
+                </div>
+                <div class="col">
+                    <label class="form-label fw-bold small">Selected Models</label>
+                    <input type="text" class="form-control form-control-sm mb-1" id="selected-search" placeholder="Filter...">
+                    <select multiple class="form-select" id="selected-models" size="10" style="resize:vertical; min-height:150px;"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapse mb-3" id="region-selection-section">
+        <div class="card card-body">
+            <div class="row g-2" id="region-checkboxes"></div>
+        </div>
+    </div>
+
+    <!-- Filter & action bar -->
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+
+                <!-- Search -->
+                <input type="text" class="form-control form-control-sm" id="search-input"
+                       placeholder="Search model..." style="width:200px">
+
+                <!-- Period -->
+                <div class="input-group input-group-sm" style="width:auto">
+                    <label class="input-group-text" for="period-select">Period</label>
+                    <select class="form-select form-select-sm" id="period-select">
+                        <option value="600">10 min</option>
+                        <option value="3600" selected>1 hour</option>
+                        <option value="10800">3 hours</option>
+                        <option value="86400">24 hours</option>
+                        <option value="today">Today</option>
+                        <option value="this-week">This week</option>
+                        <option value="this-month">This month</option>
+                        <option value="last-month">Last month</option>
+                    </select>
+                </div>
+
+                <!-- Refresh -->
+                <button class="btn btn-sm btn-outline-info" id="refresh-metrics-btn"
+                        disabled title="Configure AWS credentials first">
+                    🔄 Refresh
+                </button>
+
+                <!-- With usage only -->
+                <div class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox" id="with-usage-filter">
+                    <label class="form-check-label small" for="with-usage-filter">With usage only</label>
+                </div>
+
+                <!-- Expand/Collapse -->
+                <button class="btn btn-sm btn-outline-secondary" id="toggle-all-btn">📂 Expand All</button>
+
+                <div class="vr mx-1"></div>
+
+                <!-- Units -->
+                <div class="input-group input-group-sm" style="width:auto">
+                    <label class="input-group-text" for="unit-select">Units</label>
+                    <select class="form-select form-select-sm" id="unit-select">
+                        <option value="raw">Raw</option>
+                        <option value="auto" selected>Automatic</option>
+                    </select>
+                </div>
+
+                <!-- Export dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown">
+                        ⬇ Export
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" id="export-md-btn">Markdown (.md)</a></li>
+                        <li><a class="dropdown-item" href="#" id="export-csv-btn">CSV (.csv)</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered" id="quota-table">
+            <thead class="table-dark">
+                <tr>
+                    <th class="sortable" data-sort-key="name">Model <span class="sort-icon">⇅</span></th>
+                    <th class="sortable" data-sort-key="type">Type <span class="sort-icon">⇅</span></th>
+                    <th class="sortable" data-sort-key="limit">Limit (TPM) <span class="sort-icon">⇅</span></th>
+                    <th class="sortable" data-sort-key="peak">Peak (TPM) <span class="sort-icon">⇅</span></th>
+                    <th class="sortable" data-sort-key="p99">P99 (TPM) <span class="sort-icon">⇅</span></th>
+                    <th>Peak vs Limit</th>
+                    <th>Region</th>
+                    <th>CW</th>
+                    <th>Quota</th>
+                </tr>
+            </thead>
+            <tbody id="quota-table-body"></tbody>
+            <tbody id="no-match-row">
+                <tr><td colspan="9" class="text-center text-muted py-4" id="no-match-message">Select models to monitor.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer class="text-center text-muted small py-3 mt-2 border-top">
+    Build <span id="build-version"></span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="aws-sdk.js"></script>
+<script src="models.js"></script>
+
+<script>
+const REGIONS = [
+    'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2',
+    'ap-south-1', 'ap-southeast-1', 'ap-southeast-2',
+    'ap-northeast-1', 'ap-northeast-2',
+    'ca-central-1', 'eu-central-1',
+    'eu-west-1', 'eu-west-2', 'eu-west-3',
+    'sa-east-1'
+];
+
+// MODEL_CATALOGUE is loaded from models.js
+// Shape: [{ name, vendor, ids: [{ id, type, quotaCode }] }]
+const CATALOGUE = typeof MODEL_CATALOGUE !== 'undefined' ? MODEL_CATALOGUE : [];
+
+const state = {
+    selectedModels: new Set(),   // model names
+    selectedRegions: new Set(),
+    filters: { searchText: '', types: new Set(['On-Demand', 'Cross-Region', 'Global']), withUsageOnly: false },
+    sort: { key: null, asc: true },
+    expandedVendors: new Set(),
+    credentials: null,
+    cwClients: new Map(),        // region → CloudWatch client
+    // key: "modelId:region" → { peak, p99, datapoints[] }
+    usageCache: new Map(),
+    fetchedSet: new Set(), // keys that have been attempted: "modelId:region"
+    // key: quotaCode:region → limit
+    limitCache: new Map(),
+    darkMode: false,
+    isFetching: false,
+    periodKey: '3600',
+    displayUnit: 'auto'
+};
+
+// ========== Formatting ==========
+
+function formatTPM(value) {
+    if (value == null) return '-';
+    if (state.displayUnit === 'raw') return Math.round(value).toLocaleString();
+    // Automatic: format like du -h — pick best unit per value, 1 decimal, strip trailing .0
+    const fmt = (n, suffix) => {
+        const s = n.toFixed(1);
+        return (s.endsWith('.0') ? s.slice(0, -2) : s) + suffix;
+    };
+    if (value >= 1_000_000_000) return fmt(value / 1_000_000_000, 'G');
+    if (value >= 1_000_000)     return fmt(value / 1_000_000, 'M');
+    if (value >= 1_000)         return fmt(value / 1_000, 'K');
+    return String(Math.round(value));
+}
+
+// ========== AWS Clients ==========
+function getCWClient(region) {
+    if (!state.cwClients.has(region)) {
+        state.cwClients.set(region, new AWSClients.CloudWatchClient({
+            region,
+            credentials: {
+                accessKeyId: state.credentials.accessKeyId,
+                secretAccessKey: state.credentials.secretAccessKey,
+                sessionToken: state.credentials.sessionToken
+            }
+        }));
+    }
+    return state.cwClients.get(region);
+}
+
+// ========== Period Range ==========
+function getPeriodRange() {
+    const now = new Date();
+    const key = state.periodKey;
+    let start, end;
+
+    if (!isNaN(parseInt(key))) {
+        start = new Date(now.getTime() - parseInt(key) * 1000);
+        end = now;
+    } else if (key === 'today') {
+        start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        end = now;
+    } else if (key === 'this-week') {
+        start = new Date(now); start.setDate(now.getDate() - now.getDay()); start.setHours(0, 0, 0, 0);
+        end = now;
+    } else if (key === 'this-month') {
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = now;
+    } else if (key === 'last-month') {
+        start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        end = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+    } else {
+        start = new Date(now.getTime() - 3600 * 1000);
+        end = now;
+    }
+
+    return { start, end };
+}
+
+function buildCWConsoleUrl(modelId, region, periodKey) {
+    const encoded = modelId.replace(/\./g, '*2e').replace(/:/g, '*3a');
+    const start = getPeriodRange().start.toISOString().replace(/:/g, '*3a').replace(/\./g, '*2e');
+    const end = getPeriodRange().end.toISOString().replace(/:/g, '*3a').replace(/\./g, '*2e');
+    const graph = `~(metrics~(~(~'AWS*2fBedrock~'EstimatedTPMQuotaUsage~'ModelId~'${encoded}~(stat~'p99~period~60~id~'p99))~(~'...~(stat~'Sum~period~60~id~'sum)))~start~'${start}~end~'${end}~title~'${encoded}~region~'${region}~view~'timeSeries~stacked~false)`;
+    return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#metricsV2?graph=${graph}`;
+}
+
+function buildQuotaConsoleUrl(quotaCode, region) {
+    return `https://${region}.console.aws.amazon.com/servicequotas/home/services/bedrock/quotas/${quotaCode}`;
+}
+
+// ========== Metrics ==========
+async function fetchUsage(modelId, region) {
+    const client = getCWClient(region);
+    try {
+        const { start, end } = getPeriodRange();
+
+        const resp = await client.send(new AWSClients.GetMetricDataCommand({
+            StartTime: start,
+            EndTime: end,
+            MetricDataQueries: [
+                {
+                    Id: 'peak',
+                    MetricStat: {
+                        Metric: {
+                            Namespace: 'AWS/Bedrock',
+                            MetricName: 'EstimatedTPMQuotaUsage',
+                            Dimensions: [{ Name: 'ModelId', Value: modelId }]
+                        },
+                        Period: 60,
+                        Stat: 'Sum'
+                    },
+                    ReturnData: true
+                },
+                {
+                    Id: 'p99',
+                    MetricStat: {
+                        Metric: {
+                            Namespace: 'AWS/Bedrock',
+                            MetricName: 'EstimatedTPMQuotaUsage',
+                            Dimensions: [{ Name: 'ModelId', Value: modelId }]
+                        },
+                        Period: 3600,
+                        Stat: 'p99'
+                    },
+                    ReturnData: true
+                }
+            ]
+        }));
+
+        const peakVals = resp.MetricDataResults?.find(r => r.Id === 'peak')?.Values || [];
+        const p99Vals  = resp.MetricDataResults?.find(r => r.Id === 'p99')?.Values  || [];
+
+        if (!peakVals.length && !p99Vals.length) return null;
+
+        return {
+            peak: peakVals.length ? Math.max(...peakVals) : null,
+            p99:  p99Vals.length  ? Math.max(...p99Vals)  : null
+        };
+    } catch (e) {
+        console.warn(`fetchUsage ${modelId} ${region}:`, e.message);
+        return null;
+    }
+}
+
+async function fetchLimit(quotaCode, region) {
+    const key = `${quotaCode}:${region}`;
+    if (state.limitCache.has(key)) return state.limitCache.get(key);
+    try {
+        const client = new AWSClients.ServiceQuotasClient({
+            region,
+            credentials: {
+                accessKeyId: state.credentials.accessKeyId,
+                secretAccessKey: state.credentials.secretAccessKey,
+                sessionToken: state.credentials.sessionToken
+            }
+        });
+        const resp = await client.send(new AWSClients.GetServiceQuotaCommand({
+            ServiceCode: 'bedrock',
+            QuotaCode: quotaCode
+        }));
+        const val = resp.Quota?.Value ?? null;
+        state.limitCache.set(key, val);
+        return val;
+    } catch (e) {
+        console.warn(`fetchLimit ${quotaCode} ${region}:`, e.message);
+        return null;
+    }
+}
+
+// ========== Refresh ==========
+async function refreshMetrics() {
+    if (state.isFetching || !state.credentials) return;
+    state.isFetching = true;
+    const btn = document.getElementById('refresh-metrics-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Fetching...';
+
+    try {
+        state.usageCache.clear();
+        state.limitCache.clear();
+        state.fetchedSet.clear();
+
+        const rows = getFetchRows();
+        for (const r of rows) state.expandedVendors.add(r.vendor);
+        refreshTable();
+
+        const BATCH = 5;
+        for (let i = 0; i < rows.length; i += BATCH) {
+            await Promise.all(rows.slice(i, i + BATCH).map(async (row) => {
+                const [usage, limit] = await Promise.all([
+                    fetchUsage(row.id, row.region),
+                    row.quotaCode ? fetchLimit(row.quotaCode, row.region) : Promise.resolve(null)
+                ]);
+                if (limit != null) state.limitCache.set(`${row.quotaCode}:${row.region}`, limit);
+                state.fetchedSet.add(`${row.id}:${row.region}`);
+                if (usage) state.usageCache.set(`${row.id}:${row.region}`, { ...usage });
+            }));
+            refreshTable();
+        }
+    } finally {
+        state.isFetching = false;
+        btn.disabled = false;
+        btn.textContent = '🔄 Refresh Metrics';
+    }
+}
+
+// ========== Data Helpers ==========
+function getRowUsage(row) {
+    const u = state.usageCache.get(`${row.id}:${row.region}`);
+    const limit = row.quotaCode ? state.limitCache.get(`${row.quotaCode}:${row.region}`) : null;
+    if (!u && limit == null) return null;
+    return {
+        peak: u?.peak ?? null,
+        p99: u?.p99 ?? null,
+        limit,
+        region: row.region
+    };
+}
+
+// All rows to fetch — selected models × types × regions, no search/usage filters
+function getFetchRows() {
+    const rows = [];
+    for (const model of CATALOGUE) {
+        if (!state.selectedModels.has(model.name)) continue;
+        for (const entry of model.ids) {
+            if (!state.filters.types.has(entry.type)) continue;
+            for (const region of state.selectedRegions) {
+                rows.push({ name: model.name, vendor: model.vendor, id: entry.id, type: entry.type, quotaCode: entry.quotaCode, region });
+            }
+        }
+    }
+    return rows;
+}
+
+// Flatten catalogue into display rows based on active filters
+function getDisplayRows() {
+    const rows = [];
+    for (const model of CATALOGUE) {
+        if (!state.selectedModels.has(model.name)) continue;
+        if (state.filters.searchText) {
+            const term = state.filters.searchText.toLowerCase();
+            if (!model.name.toLowerCase().includes(term) && !model.vendor.toLowerCase().includes(term)) continue;
+        }
+        for (const entry of model.ids) {
+            if (!state.filters.types.has(entry.type)) continue;
+            for (const region of state.selectedRegions) {
+                const row = { name: model.name, vendor: model.vendor, id: entry.id, type: entry.type, quotaCode: entry.quotaCode, region };
+                if (state.filters.withUsageOnly) {
+                    const fetched = state.fetchedSet.has(`${row.id}:${row.region}`);
+                    if (!fetched) continue; // not yet fetched — hide until refresh runs
+                    const usage = getRowUsage(row);
+                    if (!usage?.peak || usage.peak <= 0) continue;
+                }
+                rows.push(row);
+            }
+        }
+    }
+    return rows;
+}
+
+function sortRows(rows) {
+    if (!state.sort.key) return rows;
+    const asc = state.sort.asc;
+    return [...rows].sort((a, b) => {
+        let va, vb;
+        switch (state.sort.key) {
+            case 'name': va = a.name; vb = b.name; break;
+            case 'type': va = a.type; vb = b.type; break;
+            case 'limit': va = getRowUsage(a)?.limit ?? -1; vb = getRowUsage(b)?.limit ?? -1; break;
+            case 'peak': va = getRowUsage(a)?.peak ?? -1; vb = getRowUsage(b)?.peak ?? -1; break;
+            case 'p99':  va = getRowUsage(a)?.p99  ?? -1; vb = getRowUsage(b)?.p99  ?? -1; break;
+            default: return 0;
+        }
+        if (typeof va === 'number') return asc ? va - vb : vb - va;
+        return asc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+    });
+}
+
+// ========== Rendering ==========
+function renderTable() {
+    const tbody = document.getElementById('quota-table-body');
+    const noMatch = document.getElementById('no-match-row');
+    const noMatchMsg = document.getElementById('no-match-message');
+    tbody.innerHTML = '';
+
+    const rows = getDisplayRows();
+    if (!rows.length) {
+        if (!state.selectedModels.size) noMatchMsg.textContent = 'Select models to monitor.';
+        else noMatchMsg.textContent = 'No rows match your filters.';
+        noMatch.style.display = '';
+        return;
+    }
+    noMatch.style.display = 'none';
+
+    const sorted = sortRows(rows);
+    const groups = new Map();
+    for (const r of sorted) {
+        if (!groups.has(r.vendor)) groups.set(r.vendor, []);
+        groups.get(r.vendor).push(r);
+    }
+
+    for (const [vendor, vendorRows] of groups) {
+        const isExpanded = state.expandedVendors.has(vendor);
+        const hdr = document.createElement('tr');
+        hdr.className = 'vendor-group-header';
+        hdr.setAttribute('data-vendor', vendor);
+        const hdrTd = document.createElement('td');
+        hdrTd.setAttribute('colspan', '9');
+        hdrTd.textContent = `${isExpanded ? '▼' : '▶'} ${vendor} (${vendorRows.length} rows)`;
+        hdr.appendChild(hdrTd);
+        tbody.appendChild(hdr);
+        if (!isExpanded) continue;
+
+        for (const row of vendorRows) {
+            const usage = getRowUsage(row);
+            const tr = document.createElement('tr');
+
+            // Model name — strip vendor prefix since rows are already under a vendor header
+            const tdName = document.createElement('td');
+            tdName.textContent = row.name.startsWith(row.vendor + ' ') ? row.name.slice(row.vendor.length + 1) : row.name;
+            tr.appendChild(tdName);
+
+            // Type badge
+            const tdType = document.createElement('td');
+            const typeCls = row.type === 'Global' ? 'bg-primary' : row.type === 'Cross-Region' ? 'bg-info text-dark' : 'bg-secondary';
+            tdType.innerHTML = `<span class="badge ${typeCls}">${row.type}</span>`;
+            tr.appendChild(tdType);
+
+            // Limit
+            const tdLimit = document.createElement('td');
+            tdLimit.textContent = formatTPM(usage?.limit);
+            tr.appendChild(tdLimit);
+
+            // Peak
+            const tdPeak = document.createElement('td');
+            tdPeak.textContent = formatTPM(usage?.peak);
+            tr.appendChild(tdPeak);
+
+            // P99
+            const tdP99 = document.createElement('td');
+            tdP99.textContent = formatTPM(usage?.p99);
+            tr.appendChild(tdP99);
+
+            // Peak vs Limit bar
+            const tdBar = document.createElement('td');
+            tdBar.className = 'bar-cell';
+            if (usage?.peak != null && usage?.limit != null && usage.limit > 0) {
+                const pct = Math.min((usage.peak / usage.limit) * 100, 100);
+                const cls = pct > 80 ? 'bg-danger' : pct >= 50 ? 'bg-warning' : 'bg-success';
+                const pctLabel = pct < 1 ? pct.toFixed(2) + '%' : Math.round(pct) + '%';
+                tdBar.innerHTML = `<div class="bar-wrap"><div class="progress" role="progressbar"><div class="progress-bar ${cls}" style="width:${Math.min(pct,100)}%"></div></div><span class="bar-label">${pctLabel}</span></div>`;
+            } else {
+                tdBar.textContent = '-';
+            }
+            tr.appendChild(tdBar);
+
+            // Region
+            const tdRegion = document.createElement('td');
+            tdRegion.innerHTML = `<span class="badge bg-info text-dark">${row.region}</span>`;
+            tr.appendChild(tdRegion);
+
+            // CloudWatch console link
+            const tdCW = document.createElement('td');
+            const cwLink = document.createElement('a');
+            cwLink.href = buildCWConsoleUrl(row.id, row.region, state.periodKey);
+            cwLink.target = '_blank';
+            cwLink.rel = 'noopener';
+            cwLink.title = 'Open in CloudWatch console';
+            cwLink.textContent = '📈';
+            tdCW.appendChild(cwLink);
+            tr.appendChild(tdCW);
+
+            // Quota increase link
+            const tdQuota = document.createElement('td');
+            if (row.quotaCode) {
+                const quotaLink = document.createElement('a');
+                quotaLink.href = buildQuotaConsoleUrl(row.quotaCode, row.region);
+                quotaLink.target = '_blank';
+                quotaLink.rel = 'noopener';
+                quotaLink.title = 'Request quota increase';
+                quotaLink.textContent = '⬆️';
+                tdQuota.appendChild(quotaLink);
+            } else {
+                tdQuota.textContent = '-';
+            }
+            tr.appendChild(tdQuota);
+
+            tbody.appendChild(tr);
+        }
+    }
+}
+
+function refreshTable() { renderTable(); updateToggleBtn(); }
+
+// ========== Model Selector ==========
+function renderModelSelector() {
+    const allModels = CATALOGUE.map(m => ({ name: m.name, vendor: m.vendor }));
+    const availSel = document.getElementById('available-models');
+    const selSel = document.getElementById('selected-models');
+    const availFilter = document.getElementById('available-search').value.toLowerCase();
+    const selFilter = document.getElementById('selected-search').value.toLowerCase();
+    availSel.innerHTML = ''; selSel.innerHTML = '';
+
+    for (const { name, vendor } of allModels) {
+        const label = name;
+        if (state.selectedModels.has(name)) {
+            if (selFilter && !label.toLowerCase().includes(selFilter) && !vendor.toLowerCase().includes(selFilter)) continue;
+            const opt = document.createElement('option');
+            opt.value = name; opt.textContent = label;
+            selSel.appendChild(opt);
+        } else {
+            if (availFilter && !label.toLowerCase().includes(availFilter) && !vendor.toLowerCase().includes(availFilter)) continue;
+            const opt = document.createElement('option');
+            opt.value = name; opt.textContent = label;
+            availSel.appendChild(opt);
+        }
+    }
+    updateModelCount();
+}
+
+function saveModelSelection() {
+    localStorage.setItem('selectedModels_bedrock', JSON.stringify([...state.selectedModels]));
+    updateModelCount();
+}
+
+function updateModelCount() {
+    document.getElementById('model-selection-count').textContent =
+        `${state.selectedModels.size}/${CATALOGUE.length} models selected`;
+}
+
+function updateRegionBadge() {
+    document.getElementById('region-count-badge').textContent =
+        `${state.selectedRegions.size} region${state.selectedRegions.size !== 1 ? 's' : ''} selected`;
+}
+
+function updateToggleBtn() {
+    const rows = getDisplayRows();
+    const vendors = new Set(rows.map(r => r.vendor));
+    const allExpanded = vendors.size > 0 && [...vendors].every(v => state.expandedVendors.has(v));
+    document.getElementById('toggle-all-btn').textContent = allExpanded ? '📁 Collapse All' : '📂 Expand All';
+}
+
+// ========== Dark Mode ==========
+function setTheme(dark) {
+    state.darkMode = dark;
+    document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    document.getElementById('theme-toggle').textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+}
+
+// ========== Export ==========
+function exportData(format) {
+    const rows = getDisplayRows();
+    const headers = ['Model', 'Type', 'Region', 'Limit (TPM)', 'Peak (TPM)', 'P99 (TPM)', 'Peak vs Limit %'];
+
+    const data = rows.map(row => {
+        const usage = getRowUsage(row);
+        const pct = usage?.peak != null && usage?.limit ? ((usage.peak / usage.limit) * 100).toFixed(1) : '-';
+        return [
+            row.name,
+            row.type,
+            row.region,
+            formatTPM(usage?.limit),
+            formatTPM(usage?.peak),
+            formatTPM(usage?.p99),
+            pct === '-' ? '-' : pct + '%'
+        ];
+    });
+
+    let content, filename, mime;
+
+    if (format === 'csv') {
+        const escape = v => `"${String(v).replace(/"/g, '""')}"`;
+        content = [headers, ...data].map(r => r.map(escape).join(',')).join('\n');
+        filename = 'bedrock-quotas.csv';
+        mime = 'text/csv';
+    } else {
+        const widths = headers.map((h, i) => Math.max(h.length, ...data.map(r => String(r[i]).length)));
+        const pad = (s, w) => String(s).padEnd(w);
+        const sep = '| ' + widths.map(w => '-'.repeat(w)).join(' | ') + ' |';
+        const row2md = r => '| ' + r.map((v, i) => pad(v, widths[i])).join(' | ') + ' |';
+        content = [row2md(headers), sep, ...data.map(row2md)].join('\n');
+        filename = 'bedrock-quotas.md';
+        mime = 'text/markdown';
+    }
+
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+}
+
+// ========== Init ==========
+function initUI() {
+    setTheme(localStorage.getItem('theme') !== 'light');
+    document.getElementById('theme-toggle').addEventListener('click', () => setTheme(!state.darkMode));
+
+    // Regions
+    const regionContainer = document.getElementById('region-checkboxes');
+    const savedRegions = localStorage.getItem('selectedRegions_bedrock');
+    state.selectedRegions = savedRegions
+        ? new Set(JSON.parse(savedRegions))
+        : new Set(['us-east-1']);
+
+    for (const region of REGIONS) {
+        const col = document.createElement('div');
+        col.className = 'col-auto';
+        col.innerHTML = `<div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${region}" id="region-${region}" ${state.selectedRegions.has(region) ? 'checked' : ''}>
+            <label class="form-check-label small" for="region-${region}">${region}</label>
+        </div>`;
+        regionContainer.appendChild(col);
+        col.querySelector('input').addEventListener('change', function () {
+            if (this.checked) state.selectedRegions.add(region);
+            else state.selectedRegions.delete(region);
+            localStorage.setItem('selectedRegions_bedrock', JSON.stringify([...state.selectedRegions]));
+            updateRegionBadge();
+        });
+    }
+    updateRegionBadge();
+
+    // Model selector — restore or default to all
+    const savedModels = localStorage.getItem('selectedModels_bedrock');
+    if (savedModels) {
+        try {
+            const saved = new Set(JSON.parse(savedModels));
+            const matched = CATALOGUE.map(m => m.name).filter(n => saved.has(n));
+            // If intersection is empty (e.g. saved names are stale from a previous naming scheme), default to all
+            state.selectedModels = matched.length > 0 ? new Set(matched) : new Set(CATALOGUE.map(m => m.name));
+        } catch (e) { state.selectedModels = new Set(CATALOGUE.map(m => m.name)); }
+    } else {
+        state.selectedModels = new Set(CATALOGUE.map(m => m.name));
+    }
+
+    renderModelSelector();
+    refreshTable();
+
+    // Model selector events
+    document.getElementById('available-search').addEventListener('input', renderModelSelector);
+    document.getElementById('selected-search').addEventListener('input', renderModelSelector);
+    document.getElementById('add-selected-models').addEventListener('click', () => {
+        for (const opt of document.getElementById('available-models').selectedOptions) state.selectedModels.add(opt.value);
+        saveModelSelection(); renderModelSelector(); refreshTable();
+    });
+    document.getElementById('add-all-models').addEventListener('click', () => {
+        for (const opt of document.getElementById('available-models').options) state.selectedModels.add(opt.value);
+        saveModelSelection(); renderModelSelector(); refreshTable();
+    });
+    document.getElementById('remove-selected-models').addEventListener('click', () => {
+        for (const opt of document.getElementById('selected-models').selectedOptions) state.selectedModels.delete(opt.value);
+        saveModelSelection(); renderModelSelector(); refreshTable();
+    });
+    document.getElementById('remove-all-models').addEventListener('click', () => {
+        for (const opt of document.getElementById('selected-models').options) state.selectedModels.delete(opt.value);
+        saveModelSelection(); renderModelSelector(); refreshTable();
+    });
+    document.getElementById('available-models').addEventListener('dblclick', e => {
+        if (e.target.tagName === 'OPTION') { state.selectedModels.add(e.target.value); saveModelSelection(); renderModelSelector(); refreshTable(); }
+    });
+    document.getElementById('selected-models').addEventListener('dblclick', e => {
+        if (e.target.tagName === 'OPTION') { state.selectedModels.delete(e.target.value); saveModelSelection(); renderModelSelector(); refreshTable(); }
+    });
+
+    // Type filter
+    ['type-on-demand', 'type-cross-region', 'type-global'].forEach(id => {
+        document.getElementById(id).addEventListener('change', function () {
+            if (this.checked) state.filters.types.add(this.value);
+            else state.filters.types.delete(this.value);
+            refreshTable();
+        });
+    });
+
+    document.getElementById('with-usage-filter').addEventListener('change', function () {
+        state.filters.withUsageOnly = this.checked;
+        refreshTable();
+    });
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', function () {
+        state.filters.searchText = this.value;
+        refreshTable();
+    });
+
+    // Period
+    document.getElementById('period-select').addEventListener('change', function () {
+        state.periodKey = this.value;
+    });
+
+    // Refresh
+    document.getElementById('refresh-metrics-btn').addEventListener('click', refreshMetrics);
+
+    // Units toggle
+    document.getElementById('unit-select').addEventListener('change', function () {
+        state.displayUnit = this.value;
+        refreshTable();
+    });
+    document.getElementById('export-md-btn').addEventListener('click', () => exportData('md'));
+    document.getElementById('export-csv-btn').addEventListener('click', () => exportData('csv'));
+
+    // Expand/Collapse all
+    document.getElementById('toggle-all-btn').addEventListener('click', function () {
+        const rows = getDisplayRows();
+        const vendors = new Set(rows.map(r => r.vendor));
+        const allExpanded = [...vendors].every(v => state.expandedVendors.has(v));
+        if (allExpanded) vendors.forEach(v => state.expandedVendors.delete(v));
+        else vendors.forEach(v => state.expandedVendors.add(v));
+        refreshTable();
+    });
+
+    // Column sorting
+    document.querySelectorAll('#quota-table th.sortable').forEach(th => {
+        th.addEventListener('click', function () {
+            const key = this.getAttribute('data-sort-key');
+            if (state.sort.key === key) state.sort.asc = !state.sort.asc;
+            else { state.sort.key = key; state.sort.asc = true; }
+            document.querySelectorAll('#quota-table th.sortable').forEach(h => {
+                const k = h.getAttribute('data-sort-key');
+                h.classList.toggle('sort-active', k === state.sort.key);
+                h.querySelector('.sort-icon').textContent = k === state.sort.key ? (state.sort.asc ? '▲' : '▼') : '⇅';
+            });
+            refreshTable();
+        });
+    });
+
+    // Table click delegation
+    document.getElementById('quota-table-body').addEventListener('click', function (e) {
+        const hdr = e.target.closest('.vendor-group-header');
+        if (hdr) {
+            const vendor = hdr.getAttribute('data-vendor');
+            if (state.expandedVendors.has(vendor)) state.expandedVendors.delete(vendor);
+            else state.expandedVendors.add(vendor);
+            refreshTable();
+            return;
+        }
+    });
+
+    // Credentials form
+    document.getElementById('credentials-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const a = document.getElementById('access-key-input').value.trim();
+        const s = document.getElementById('secret-key-input').value.trim();
+        const t = document.getElementById('session-token-input').value.trim() || null;
+        if (!a || !s || typeof AWSClients === 'undefined') return;
+        state.credentials = { accessKeyId: a, secretAccessKey: s };
+        if (t) state.credentials.sessionToken = t;
+        state.cwClients.clear();
+        sessionStorage.setItem('aws_access_key', a);
+        sessionStorage.setItem('aws_secret_key', s);
+        if (t) sessionStorage.setItem('aws_session_token', t); else sessionStorage.removeItem('aws_session_token');
+        document.getElementById('refresh-metrics-btn').disabled = false;
+        document.getElementById('refresh-metrics-btn').title = 'Refresh usage metrics from CloudWatch';
+        const btn = this.querySelector('button[type="submit"]');
+        btn.textContent = '✓ Configured'; btn.classList.replace('btn-primary', 'btn-success');
+        setTimeout(() => { btn.textContent = 'Configure'; btn.classList.replace('btn-success', 'btn-primary'); }, 2000);
+        document.getElementById('credentials-btn').classList.add('btn-success');
+        document.getElementById('credentials-btn').classList.remove('btn-outline-secondary');
+        document.getElementById('credentials-status').textContent = `Configured — ${new Date().toLocaleTimeString()}`;
+    });
+
+    // Restore credentials
+    const sk = sessionStorage.getItem('aws_access_key'), ss = sessionStorage.getItem('aws_secret_key'), st = sessionStorage.getItem('aws_session_token');
+    if (sk && ss) {
+        document.getElementById('access-key-input').value = sk;
+        document.getElementById('secret-key-input').value = ss;
+        if (st) document.getElementById('session-token-input').value = st;
+        state.credentials = { accessKeyId: sk, secretAccessKey: ss };
+        if (st) state.credentials.sessionToken = st;
+        document.getElementById('refresh-metrics-btn').disabled = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initUI();
+    const el = document.getElementById('build-version');
+    if (el) el.textContent = typeof BUILD_VERSION !== 'undefined' ? BUILD_VERSION : 'unknown';
+});
+</script>
+</body>
+</html>
