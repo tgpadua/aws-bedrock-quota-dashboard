@@ -145,13 +145,7 @@ const MODEL_CATALOGUE = [
         "id": "amazon.titan-embed-text-v1:2:8k",
         "type": "On-Demand",
         "quotaCode": "L-74B5B793"
-      }
-    ]
-  },
-  {
-    "name": "Amazon Titan Embeddings G1 - Text",
-    "vendor": "Amazon",
-    "ids": [
+      },
       {
         "id": "amazon.titan-embed-text-v1",
         "type": "On-Demand",
@@ -167,13 +161,7 @@ const MODEL_CATALOGUE = [
         "id": "amazon.titan-embed-image-v1:0",
         "type": "On-Demand",
         "quotaCode": "L-ABC24664"
-      }
-    ]
-  },
-  {
-    "name": "Amazon Titan Multimodal Embeddings G1",
-    "vendor": "Amazon",
-    "ids": [
+      },
       {
         "id": "amazon.titan-embed-image-v1",
         "type": "On-Demand",
@@ -461,13 +449,7 @@ const MODEL_CATALOGUE = [
         "id": "cohere.embed-english-v3:0:512",
         "type": "On-Demand",
         "quotaCode": "L-A2BE277A"
-      }
-    ]
-  },
-  {
-    "name": "Cohere Embed English",
-    "vendor": "Cohere",
-    "ids": [
+      },
       {
         "id": "cohere.embed-english-v3",
         "type": "On-Demand",
@@ -483,13 +465,7 @@ const MODEL_CATALOGUE = [
         "id": "cohere.embed-multilingual-v3:0:512",
         "type": "On-Demand",
         "quotaCode": "L-C2F86908"
-      }
-    ]
-  },
-  {
-    "name": "Cohere Embed Multilingual",
-    "vendor": "Cohere",
-    "ids": [
+      },
       {
         "id": "cohere.embed-multilingual-v3",
         "type": "On-Demand",
