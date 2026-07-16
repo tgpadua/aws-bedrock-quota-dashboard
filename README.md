@@ -2,6 +2,8 @@
 
 A static single-page application for monitoring Amazon Bedrock model quota consumption (tokens per minute) using the `EstimatedTPMQuotaUsage` CloudWatch metric. Designed to be hosted on GitHub Pages with no backend required.
 
+**▶ Live site: https://tgpadua.github.io/aws-bedrock-quota-dashboard/**
+
 ## Why This Exists
 
 Monitoring Bedrock quota consumption is harder than it should be:
