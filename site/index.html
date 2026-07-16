@@ -107,6 +107,34 @@
     <!-- Collapsibles -->
     <div class="collapse mb-3" id="credentials-section">
         <div class="card card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p class="small fw-semibold mb-1">Get temporary credentials:</p>
+                    <pre class="bg-body-secondary rounded p-2 small mb-0 user-select-all">aws sts get-session-token --output json</pre>
+                    <p class="text-muted small mt-1 mb-0">Paste the JSON output below, or copy <code>AccessKeyId</code>, <code>SecretAccessKey</code> and <code>SessionToken</code> into the fields manually.</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="small fw-semibold mb-1">Required IAM permissions:</p>
+                    <pre class="bg-body-secondary rounded p-2 small mb-0">cloudwatch:GetMetricData
+servicequotas:GetServiceQuota</pre>
+                    <p class="text-muted small mt-1 mb-0">Credentials are stored in <code>sessionStorage</code> and cleared when the tab closes.</p>
+                </div>
+            </div>
+
+            <hr class="my-3">
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold mb-1" for="sts-json-input">
+                    Paste <code>aws sts get-session-token --output json</code> output:
+                </label>
+                <div class="d-flex gap-2 align-items-start">
+                    <textarea class="form-control form-control-sm font-monospace" id="sts-json-input" rows="4"
+                              placeholder='{&#10;    "Credentials": {&#10;        "AccessKeyId": "ASIA...",&#10;        "SecretAccessKey": "...",&#10;        "SessionToken": "..."&#10;    }&#10;}' style="max-width:560px;"></textarea>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="sts-json-parse-btn">Parse &amp; fill</button>
+                </div>
+                <span id="sts-json-status" class="text-muted small"></span>
+            </div>
+
             <form id="credentials-form">
                 <div class="row g-2 align-items-end">
                     <div class="col-auto">
@@ -129,22 +157,6 @@
                     </div>
                 </div>
             </form>
-
-            <hr class="my-3">
-
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <p class="small fw-semibold mb-1">Get temporary credentials:</p>
-                    <pre class="bg-body-secondary rounded p-2 small mb-0 user-select-all">aws sts get-session-token --output json</pre>
-                    <p class="text-muted small mt-1 mb-0">Copy <code>AccessKeyId</code>, <code>SecretAccessKey</code> and <code>SessionToken</code> from the output into the fields above.</p>
-                </div>
-                <div class="col-md-6">
-                    <p class="small fw-semibold mb-1">Required IAM permissions:</p>
-                    <pre class="bg-body-secondary rounded p-2 small mb-0">cloudwatch:GetMetricData
-servicequotas:GetServiceQuota</pre>
-                    <p class="text-muted small mt-1 mb-0">Credentials are stored in <code>sessionStorage</code> and cleared when the tab closes.</p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -952,6 +964,36 @@ function initUI() {
         document.getElementById('credentials-btn').classList.add('btn-success');
         document.getElementById('credentials-btn').classList.remove('btn-outline-secondary');
         document.getElementById('credentials-status').textContent = `Configured — ${new Date().toLocaleTimeString()}`;
+    });
+
+    // Parse & fill from `aws sts get-session-token --output json` output.
+    // Accepts the full response ({ Credentials: {...} }) or a bare credentials object.
+    document.getElementById('sts-json-parse-btn').addEventListener('click', function () {
+        const status = document.getElementById('sts-json-status');
+        const raw = document.getElementById('sts-json-input').value.trim();
+        if (!raw) { status.className = 'text-danger small'; status.textContent = 'Paste the JSON output first.'; return; }
+
+        let obj;
+        try { obj = JSON.parse(raw); }
+        catch (err) { status.className = 'text-danger small'; status.textContent = 'Invalid JSON — paste the full output of the command.'; return; }
+
+        const c = obj.Credentials || obj.credentials || obj;
+        const accessKey = c.AccessKeyId || c.accessKeyId;
+        const secretKey = c.SecretAccessKey || c.secretAccessKey;
+        const sessionToken = c.SessionToken || c.sessionToken || '';
+
+        if (!accessKey || !secretKey) {
+            status.className = 'text-danger small';
+            status.textContent = 'Could not find AccessKeyId / SecretAccessKey in the JSON.';
+            return;
+        }
+
+        document.getElementById('access-key-input').value = accessKey;
+        document.getElementById('secret-key-input').value = secretKey;
+        document.getElementById('session-token-input').value = sessionToken;
+
+        status.className = 'text-success small';
+        status.textContent = '✓ Fields filled — click Configure to apply.';
     });
 
     // Restore credentials
