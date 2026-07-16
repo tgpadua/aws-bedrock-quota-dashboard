@@ -444,5 +444,32 @@
     },
     "zai.glm-5": {
         "On-Demand": "L-99316427"
+    },
+    "qwen.qwen3-235b-a22b-2507-v1:0": {
+        "On-Demand": "L-3875BCCF"
+    },
+    "qwen.qwen3-coder-480b-a35b-v1:0": {
+        "On-Demand": "L-4D0E44C8"
+    },
+    "deepseek.v3-v1:0": {
+        "On-Demand": "L-30A6895A"
+    },
+    "amazon.rerank-v1:0": {
+        "On-Demand": null
+    },
+    "stability.sd3-5-large-v1:0": {
+        "On-Demand": null
+    },
+    "stability.stable-image-core-v1": {
+        "On-Demand": null
+    },
+    "stability.stable-image-ultra-v1": {
+        "On-Demand": null
+    },
+    "mistral.mistral-large-2407-v1:0": {
+        "On-Demand": "L-1C28E1AB"
+    },
+    "luma.ray-v2:0": {
+        "On-Demand": null
     }
 }
