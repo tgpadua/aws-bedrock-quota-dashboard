@@ -793,7 +793,7 @@ function initUI() {
     const savedRegions = localStorage.getItem('selectedRegions_bedrock');
     state.selectedRegions = savedRegions
         ? new Set(JSON.parse(savedRegions))
-        : new Set(['us-east-1']);
+        : new Set(['us-east-1', 'us-west-2']);
 
     for (const region of REGIONS) {
         const col = document.createElement('div');
