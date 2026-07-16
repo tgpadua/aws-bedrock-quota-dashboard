@@ -1,5 +1,8 @@
 node_modules/
 
+# macOS
+.DS_Store
+
 # Intermediate build artifacts — contain account-specific ARNs
 data/
 

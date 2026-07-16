@@ -13,6 +13,8 @@
 .vendor-group-header { cursor: pointer; background-color: var(--bs-tertiary-bg) !important; }
         .vendor-group-header:hover { background-color: var(--bs-secondary-bg) !important; }
         .vendor-group-header td { font-weight: 600; }
+        #quota-table-head th { background-color: var(--bs-tertiary-bg); }
+        #help-modal .modal-dialog { max-width: min(1600px, 95vw); }
         th.sortable { cursor: pointer; user-select: none; }
         th.sortable:hover { opacity: 0.85; }
         th.sortable .sort-icon { margin-left: 4px; opacity: 0.5; }
@@ -23,11 +25,28 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Amazon Bedrock Quota Dashboard</span>
+        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="modal"
+                data-bs-target="#help-modal" title="What is this dashboard?">
+            ❓ Help
+        </button>
     </div>
 </nav>
+
+<!-- Help modal -->
+<div class="modal fade" id="help-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content position-relative">
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                    style="z-index:10;" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body p-0">
+                <img src="help.png" alt="Why this dashboard exists — the six gaps it closes" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid mt-3">
 
@@ -172,12 +191,12 @@ servicequotas:GetServiceQuota</pre>
                     <label class="input-group-text" for="period-select">Period</label>
                     <select class="form-select form-select-sm" id="period-select">
                         <option value="600">10 min</option>
-                        <option value="3600" selected>1 hour</option>
+                        <option value="3600">1 hour</option>
                         <option value="10800">3 hours</option>
                         <option value="86400">24 hours</option>
                         <option value="today">Today</option>
                         <option value="this-week">This week</option>
-                        <option value="this-month">This month</option>
+                        <option value="this-month" selected>This month</option>
                         <option value="last-month">Last month</option>
                     </select>
                 </div>
@@ -226,7 +245,7 @@ servicequotas:GetServiceQuota</pre>
     <!-- Table -->
     <div class="table-responsive">
         <table class="table table-striped table-hover table-bordered" id="quota-table">
-            <thead class="table-dark">
+            <thead id="quota-table-head">
                 <tr>
                     <th class="sortable" data-sort-key="name">Model <span class="sort-icon">⇅</span></th>
                     <th class="sortable" data-sort-key="type">Type <span class="sort-icon">⇅</span></th>
@@ -254,6 +273,7 @@ servicequotas:GetServiceQuota</pre>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="aws-sdk.js"></script>
 <script src="models.js"></script>
+<script src="version.js"></script>
 
 <script>
 const REGIONS = [
@@ -805,6 +825,9 @@ function initUI() {
         state.selectedModels = new Set(CATALOGUE.map(m => m.name));
     }
 
+    // Expand all vendor groups by default
+    CATALOGUE.forEach(m => state.expandedVendors.add(m.vendor));
+
     renderModelSelector();
     refreshTable();
 
@@ -854,7 +877,8 @@ function initUI() {
         refreshTable();
     });
 
-    // Period
+    // Period — initialise from select's current value, not from hardcoded state default
+    state.periodKey = document.getElementById('period-select').value;
     document.getElementById('period-select').addEventListener('change', function () {
         state.periodKey = this.value;
     });

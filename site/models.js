@@ -1046,4 +1046,3 @@ const MODEL_CATALOGUE = [
     ]
   }
 ];
-const BUILD_VERSION = '2026.07.09-191912';

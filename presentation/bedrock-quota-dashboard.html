@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bedrock Quota Dashboard — Why This Exists</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1c2330;
+    --line:#2b3444; --ink:#e6edf3; --muted:#9aa7b5;
+    --accent:#ff9900;      /* AWS orange */
+    --accent-2:#4dabf7;    /* info blue  */
+    --green:#3fb950; --yellow:#e3b341; --red:#f85149;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{background:#05070b; font-family:"Segoe UI",Helvetica,Arial,sans-serif;}
+  /* 16:9 slide, scales to fit the viewport */
+  .slide{
+    position:relative; width:1280px; height:720px; margin:24px auto;
+    background:linear-gradient(160deg,#0d1117 0%,#0b1220 55%,#0a0f18 100%);
+    color:var(--ink); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.6);
+    padding:44px 52px;
+  }
+  .glow{position:absolute; width:520px; height:520px; border-radius:50%;
+    filter:blur(120px); opacity:.18; pointer-events:none;}
+  .glow.a{background:var(--accent); top:-180px; right:-120px;}
+  .glow.b{background:var(--accent-2); bottom:-220px; left:-160px;}
+
+  header{display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+  .badge{font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); border:1px solid var(--accent); padding:4px 12px;
+    border-radius:999px; font-weight:600;}
+  .kicker{color:var(--muted); font-size:14px; letter-spacing:.04em;}
+  h1{font-size:44px; font-weight:800; margin:14px 0 4px; letter-spacing:-.5px;}
+  h1 .accent{color:var(--accent);}
+  .lede{color:var(--muted); font-size:17px; max-width:900px; margin-bottom:22px;}
+
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .card{background:linear-gradient(180deg,var(--panel) 0%,var(--panel-2) 100%);
+    border:1px solid var(--line); border-radius:12px; padding:16px 16px 15px;
+    position:relative; min-height:132px;}
+  .card .n{position:absolute; top:-11px; left:16px; width:26px; height:26px;
+    background:var(--accent); color:#0d1117; font-weight:800; font-size:14px;
+    border-radius:7px; display:flex; align-items:center; justify-content:center;}
+  .card h3{font-size:16px; margin:10px 0 6px; line-height:1.25;}
+  .card p{font-size:13.5px; color:var(--muted); line-height:1.45;}
+  .card p code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    font-size:0.88em; color:var(--accent-2); background:rgba(77,171,247,.10);
+    border:1px solid rgba(77,171,247,.22); border-radius:4px; padding:1px 5px;}
+  .card .tag{position:absolute; top:14px; right:14px; font-size:16px; opacity:.85;}
+
+  .solution{margin-top:22px; display:flex; align-items:center; gap:18px;
+    background:linear-gradient(90deg,rgba(255,153,0,.14),rgba(77,171,247,.10));
+    border:1px solid rgba(255,153,0,.35); border-radius:12px; padding:16px 22px;}
+  .solution .arrow{font-size:26px; color:var(--accent);}
+  .solution .txt{font-size:16.5px; line-height:1.4;}
+  .solution .txt b{color:var(--ink);}
+  .solution .txt span{color:var(--muted);}
+  .pills{display:flex; gap:8px; margin-left:auto; flex-shrink:0;}
+  .pill{font-size:12px; color:var(--ink); background:rgba(255,255,255,.06);
+    border:1px solid var(--line); padding:6px 11px; border-radius:999px;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="glow a"></div>
+  <div class="glow b"></div>
+
+  <header>
+    <span class="badge">Bedrock Quota Dashboard</span>
+  </header>
+
+  <h1>Why this <span class="accent">dashboard</span>?</h1>
+  <p class="lede">This dashboard closes the six gaps that make Bedrock quota consumption monitoring hard.</p>
+
+  <div class="grid">
+    <div class="card">
+      <span class="n">1</span><span class="tag">🔀</span>
+      <h3>Quotas & metrics live apart</h3>
+      <p>Limits sit in Service Quotas, consumption in CloudWatch — cross-referenced by hand, one model at a time.</p>
+    </div>
+    <div class="card">
+      <span class="n">2</span><span class="tag">🗺️</span>
+      <h3>The mapping is undocumented</h3>
+      <p>No canonical map ties a CloudWatch <code>ModelId</code> to its Service Quotas <code>QuotaCode</code>.</p>
+    </div>
+    <div class="card">
+      <span class="n">3</span><span class="tag">📊</span>
+      <h3>No unified multi-model view</h3>
+      <p>Nothing shows every model’s TPM usage side-by-side with its limit. You get metrics <i>or</i> quotas — not both.</p>
+    </div>
+    <div class="card">
+      <span class="n">4</span><span class="tag">🧩</span>
+      <h3>Three quota types, three limits</h3>
+      <p>On-Demand, Cross-Region and Global each draw down separate quotas — and it’s non-obvious which is which.</p>
+    </div>
+    <div class="card">
+      <span class="n">5</span><span class="tag">🌎</span>
+      <h3>Multi-region monitoring complexity</h3>
+      <p>Cross-region & global profiles span multiple regions at once. CloudWatch can show them together, but only by wiring up a cross-region dashboard manually.</p>
+    </div>
+    <div class="card">
+      <span class="n">6</span><span class="tag">🚨</span>
+      <h3>Found out at throttle time</h3>
+      <p>Without an easy way to watch headroom, exhaustion is usually discovered in production when requests start failing.</p>
+    </div>
+  </div>
+
+  <div class="solution">
+    <span class="arrow">➜</span>
+    <div class="txt"><b>One static page that solves all six.</b>
+      <span>Quotas + live usage, every model × region, in one view.</span></div>
+    <div class="pills">
+      <span class="pill">GitHub Pages</span>
+      <span class="pill">No backend</span>
+      <span class="pill">No infra cost</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

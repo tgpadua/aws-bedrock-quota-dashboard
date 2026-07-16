@@ -5,7 +5,10 @@
     "fetch": "node build/fetch.js",
     "aggregate": "node build/aggregate.js",
     "bundle-sdk": "node build/bundle-sdk.js",
-    "build": "npm run fetch && npm run aggregate && npm run bundle-sdk"
+    "copy-assets": "node build/copy-assets.js",
+    "stamp": "node build/stamp-version.js",
+    "build:site": "npm run bundle-sdk && npm run copy-assets && npm run stamp",
+    "build": "npm run fetch && npm run aggregate && npm run build:site"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock": "^3",
