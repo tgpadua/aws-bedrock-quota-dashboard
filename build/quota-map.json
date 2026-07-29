@@ -471,5 +471,10 @@
     },
     "luma.ray-v2:0": {
         "On-Demand": null
+    },
+    "anthropic.claude-opus-5": {
+        "On-Demand": null,
+        "Cross-Region": "L-99296DCD",
+        "Global": "L-D73B1244"
     }
 }

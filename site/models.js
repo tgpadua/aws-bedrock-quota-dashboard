@@ -294,6 +294,22 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
+    "name": "Anthropic Claude Opus 5",
+    "vendor": "Anthropic",
+    "ids": [
+      {
+        "id": "us.anthropic.claude-opus-5",
+        "type": "Cross-Region",
+        "quotaCode": "L-99296DCD"
+      },
+      {
+        "id": "global.anthropic.claude-opus-5",
+        "type": "Global",
+        "quotaCode": "L-D73B1244"
+      }
+    ]
+  },
+  {
     "name": "Anthropic Claude Sonnet 4",
     "vendor": "Anthropic",
     "ids": [
