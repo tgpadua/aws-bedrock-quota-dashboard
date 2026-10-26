@@ -139,21 +139,6 @@ const MODEL_CATALOGUE = [
     "vendor": "Anthropic",
     "ids": [
       {
-        "id": "anthropic.claude-3-haiku-20240307-v1:0:48k",
-        "type": "On-Demand",
-        "quotaCode": "L-8CE99163"
-      },
-      {
-        "id": "anthropic.claude-3-haiku-20240307-v1:0:200k",
-        "type": "On-Demand",
-        "quotaCode": "L-8CE99163"
-      },
-      {
-        "id": "anthropic.claude-3-haiku-20240307-v1:0",
-        "type": "On-Demand",
-        "quotaCode": "L-8CE99163"
-      },
-      {
         "id": "us.anthropic.claude-3-haiku-20240307-v1:0",
         "type": "Cross-Region",
         "quotaCode": "L-DCADBC78"
@@ -164,21 +149,6 @@ const MODEL_CATALOGUE = [
     "name": "Anthropic Claude 3 Sonnet",
     "vendor": "Anthropic",
     "ids": [
-      {
-        "id": "anthropic.claude-3-sonnet-20240229-v1:0:28k",
-        "type": "On-Demand",
-        "quotaCode": "L-4C35BB2A"
-      },
-      {
-        "id": "anthropic.claude-3-sonnet-20240229-v1:0:200k",
-        "type": "On-Demand",
-        "quotaCode": "L-4C35BB2A"
-      },
-      {
-        "id": "anthropic.claude-3-sonnet-20240229-v1:0",
-        "type": "On-Demand",
-        "quotaCode": "L-4C35BB2A"
-      },
       {
         "id": "us.anthropic.claude-3-sonnet-20240229-v1:0",
         "type": "Cross-Region",
@@ -203,6 +173,22 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
+    "name": "Anthropic Claude Fable 5.1",
+    "vendor": "Anthropic",
+    "ids": [
+      {
+        "id": "us.anthropic.claude-fable-5-1",
+        "type": "Cross-Region",
+        "quotaCode": "L-E8940935"
+      },
+      {
+        "id": "global.anthropic.claude-fable-5-1",
+        "type": "Global",
+        "quotaCode": "L-50CC5674"
+      }
+    ]
+  },
+  {
     "name": "Anthropic Claude Haiku 4.5",
     "vendor": "Anthropic",
     "ids": [
@@ -215,6 +201,22 @@ const MODEL_CATALOGUE = [
         "id": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
         "type": "Global",
         "quotaCode": "L-9A11C666"
+      }
+    ]
+  },
+  {
+    "name": "Anthropic Claude Haiku 5.5",
+    "vendor": "Anthropic",
+    "ids": [
+      {
+        "id": "anthropic.claude-haiku-5-5",
+        "type": "On-Demand",
+        "quotaCode": "L-7AB4ABDD"
+      },
+      {
+        "id": "global.anthropic.claude-haiku-5-5",
+        "type": "Global",
+        "quotaCode": "L-F26CA8D1"
       }
     ]
   },
@@ -310,14 +312,20 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
-    "name": "Anthropic Claude Sonnet 4",
+    "name": "Anthropic Claude Opus 5.5",
     "vendor": "Anthropic",
     "ids": [
       {
-        "id": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+        "id": "us.anthropic.claude-opus-5-5",
         "type": "Cross-Region",
-        "quotaCode": "L-59759B4A"
-      },
+        "quotaCode": "L-A4430697"
+      }
+    ]
+  },
+  {
+    "name": "Anthropic Claude Sonnet 4",
+    "vendor": "Anthropic",
+    "ids": [
       {
         "id": "global.anthropic.claude-sonnet-4-20250514-v1:0",
         "type": "Global",
@@ -374,24 +382,18 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
-    "name": "Cohere Command R",
-    "vendor": "Cohere",
+    "name": "Anthropic Claude Sonnet 5.5",
+    "vendor": "Anthropic",
     "ids": [
       {
-        "id": "cohere.command-r-v1:0",
-        "type": "On-Demand",
-        "quotaCode": "L-17F95AA4"
-      }
-    ]
-  },
-  {
-    "name": "Cohere Command R+",
-    "vendor": "Cohere",
-    "ids": [
+        "id": "us.anthropic.claude-sonnet-5-5",
+        "type": "Cross-Region",
+        "quotaCode": "L-94A31E46"
+      },
       {
-        "id": "cohere.command-r-plus-v1:0",
-        "type": "On-Demand",
-        "quotaCode": "L-17F95AA4"
+        "id": "global.anthropic.claude-sonnet-5-5",
+        "type": "Global",
+        "quotaCode": "L-31AB82D0"
       }
     ]
   },
@@ -854,6 +856,102 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
+    "name": "OpenAI GPT-5.6 Luna",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-5.6-luna",
+        "type": "Cross-Region",
+        "quotaCode": "L-E3C70889"
+      },
+      {
+        "id": "global.openai.gpt-5.6-luna",
+        "type": "Global",
+        "quotaCode": "L-D983F7C0"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-5.6 Sol",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-5.6-sol",
+        "type": "Cross-Region",
+        "quotaCode": "L-D94ECE3B"
+      },
+      {
+        "id": "global.openai.gpt-5.6-sol",
+        "type": "Global",
+        "quotaCode": "L-4D7537CF"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-5.6 Terra",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-5.6-terra",
+        "type": "Cross-Region",
+        "quotaCode": "L-99936FBF"
+      },
+      {
+        "id": "global.openai.gpt-5.6-terra",
+        "type": "Global",
+        "quotaCode": "L-8E752C84"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-6 Astra",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-6-astra",
+        "type": "Cross-Region",
+        "quotaCode": "L-53A144CD"
+      },
+      {
+        "id": "global.openai.gpt-6-astra",
+        "type": "Global",
+        "quotaCode": "L-B38B530A"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-6 Sol",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-6-sol",
+        "type": "Cross-Region",
+        "quotaCode": "L-8FD128CF"
+      },
+      {
+        "id": "global.openai.gpt-6-sol",
+        "type": "Global",
+        "quotaCode": "L-039AF68B"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-6.1 Sol",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-6.1-sol",
+        "type": "Cross-Region",
+        "quotaCode": "L-8C5F762B"
+      },
+      {
+        "id": "global.openai.gpt-6.1-sol",
+        "type": "Global",
+        "quotaCode": "L-B5C023CA"
+      }
+    ]
+  },
+  {
     "name": "OpenAI gpt-oss-120b",
     "vendor": "OpenAI",
     "ids": [
@@ -975,6 +1073,38 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
+    "name": "xAI Grok 4.6",
+    "vendor": "xAI",
+    "ids": [
+      {
+        "id": "us.xai.grok-4.6",
+        "type": "Cross-Region",
+        "quotaCode": "L-0F2ECB41"
+      },
+      {
+        "id": "global.xai.grok-4.6",
+        "type": "Global",
+        "quotaCode": "L-2AD735F5"
+      }
+    ]
+  },
+  {
+    "name": "xAI Grok 4.7",
+    "vendor": "xAI",
+    "ids": [
+      {
+        "id": "us.xai.grok-4.7",
+        "type": "Cross-Region",
+        "quotaCode": "L-5DAEA81C"
+      },
+      {
+        "id": "global.xai.grok-4.7",
+        "type": "Global",
+        "quotaCode": "L-A4F73742"
+      }
+    ]
+  },
+  {
     "name": "Z.AI GLM 4.7",
     "vendor": "Z.AI",
     "ids": [
@@ -1004,6 +1134,27 @@ const MODEL_CATALOGUE = [
         "id": "zai.glm-5",
         "type": "On-Demand",
         "quotaCode": "L-99316427"
+      }
+    ]
+  },
+  {
+    "name": "Z.AI GLM 5.3",
+    "vendor": "Z.AI",
+    "ids": [
+      {
+        "id": "zai.glm-5.3",
+        "type": "On-Demand",
+        "quotaCode": "L-99316427"
+      },
+      {
+        "id": "us.zai.glm-5.3",
+        "type": "Cross-Region",
+        "quotaCode": "L-4A544964"
+      },
+      {
+        "id": "global.zai.glm-5.3",
+        "type": "Global",
+        "quotaCode": "L-6473F1D2"
       }
     ]
   }

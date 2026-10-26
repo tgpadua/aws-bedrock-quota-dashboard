@@ -476,5 +476,90 @@
         "On-Demand": null,
         "Cross-Region": "L-99296DCD",
         "Global": "L-D73B1244"
+    },
+    "openai.gpt-6-astra": {
+        "On-Demand": null,
+        "Global": "L-B38B530A",
+        "Cross-Region": "L-53A144CD"
+    },
+    "openai.gpt-5.6-terra": {
+        "On-Demand": null,
+        "Cross-Region": "L-99936FBF",
+        "Global": "L-8E752C84"
+    },
+    "anthropic.claude-haiku-5-5": {
+        "On-Demand": "L-7AB4ABDD",
+        "Global": "L-F26CA8D1"
+    },
+    "twelvelabs.pegasus-1-5-v1:0": {
+        "On-Demand": null,
+        "Global": null,
+        "Cross-Region": null
+    },
+    "xai.grok-4.7": {
+        "On-Demand": null,
+        "Cross-Region": "L-5DAEA81C",
+        "Global": "L-A4F73742"
+    },
+    "xai.grok-4.6": {
+        "On-Demand": null,
+        "Cross-Region": "L-0F2ECB41",
+        "Global": "L-2AD735F5"
+    },
+    "openai.gpt-6.1-sol": {
+        "On-Demand": null,
+        "Global": "L-B5C023CA",
+        "Cross-Region": "L-8C5F762B"
+    },
+    "openai.gpt-6-sol": {
+        "On-Demand": null,
+        "Global": "L-039AF68B",
+        "Cross-Region": "L-8FD128CF"
+    },
+    "openai.gpt-6-luna": {
+        "On-Demand": null
+    },
+    "anthropic.claude-fable-5-1": {
+        "On-Demand": null,
+        "Cross-Region": "L-E8940935",
+        "Global": "L-50CC5674"
+    },
+    "openai.gpt-5.6-luna": {
+        "On-Demand": null,
+        "Global": "L-D983F7C0",
+        "Cross-Region": "L-E3C70889"
+    },
+    "anthropic.claude-sonnet-5-5": {
+        "On-Demand": null,
+        "Cross-Region": "L-94A31E46",
+        "Global": "L-31AB82D0"
+    },
+    "openai.gpt-5.6-sol": {
+        "On-Demand": null,
+        "Cross-Region": "L-D94ECE3B",
+        "Global": "L-4D7537CF"
+    },
+    "amazon.nova-2-5-sonic": {
+        "On-Demand": null
+    },
+    "anthropic.claude-opus-5-5": {
+        "Cross-Region": "L-A4430697",
+        "On-Demand": null
+    },
+    "openai.gpt-5.4": {
+        "Global": null,
+        "On-Demand": null
+    },
+    "openai.gpt-5.5": {
+        "Cross-Region": null,
+        "Global": null
+    },
+    "zai.glm-5.3": {
+        "Cross-Region": "L-4A544964",
+        "Global": "L-6473F1D2",
+        "On-Demand": "L-99316427"
+    },
+    "moonshotai.kimi-k3": {
+        "On-Demand": null
     }
 }
