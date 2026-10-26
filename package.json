@@ -14,7 +14,8 @@
     "@aws-sdk/client-bedrock": "^3",
     "@aws-sdk/client-bedrock-runtime": "^3",
     "@aws-sdk/client-cloudwatch": "^3",
-    "@aws-sdk/client-service-quotas": "^3"
+    "@aws-sdk/client-service-quotas": "^3",
+    "@aws-sdk/client-ssm": "^3.1156.0"
   },
   "devDependencies": {
     "esbuild": "^0.25"

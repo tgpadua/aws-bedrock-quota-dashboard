@@ -18,12 +18,14 @@ data/                 Intermediate build artifacts (gitignored, re-generated eac
   quotas.json         Raw output of ListServiceQuotas(bedrock)
   foundation-models.json  Raw output of ListFoundationModels
   inference-profiles.json Raw output of ListInferenceProfiles
+  regions.json        Bedrock regions from public SSM global-infrastructure params
 presentation/
   bedrock-quota-dashboard.html  Source of the "Why this dashboard?" slide
   bedrock-quota-dashboard.png   Rendered slide — copied to site/help.png at build; shown in the in-app Help modal
 site/
   index.html          The entire SPA — HTML + all JS inline (no bundler)
   models.js           Generated: const MODEL_CATALOGUE = [...]
+  regions.js          Generated: const BEDROCK_REGIONS = [...] (region checkboxes)
   aws-sdk.js          Generated: window.AWSClients = { CloudWatchClient, ... }
   version.js          Generated: const BUILD_VERSION = '...' (footer stamp)
   help.png            Generated: copy of the presentation slide (Help modal image)
@@ -63,10 +65,11 @@ Two build paths:
 ## Key Data Flows
 
 ### Build time
-1. `fetch.js` calls `ListServiceQuotas`, `ListFoundationModels`, `ListInferenceProfiles` in parallel
+1. `fetch.js` calls `ListServiceQuotas`, `ListFoundationModels`, `ListInferenceProfiles`, and SSM `GetParametersByPath(/aws/service/global-infrastructure/services/bedrock/regions)` in parallel (regions filtered to the commercial partition — no `us-gov-`/`eusc-`/`cn-`)
 2. `aggregate.js` groups model IDs by base ID (strips `us.`/`global.` prefix and context-window suffix), looks up quota codes from `quota-map.json`, calls Bedrock LLM for unknowns
 3. `aggregate.js` then merges entries sharing the same `(vendor, name)` into one catalogue entry (deduping IDs). Needed because `toBaseId` keeps a trailing `:0`, so ID variants like `model-v3:0:512` and `model-v3` group separately despite being the same model; without the merge they produce duplicate-named entries and an inconsistent selection count (the model selector keys on name)
 4. Models without any TPM quota code are excluded from the catalogue
+4a. `aggregate.js` also writes `site/regions.js` from `data/regions.json` — the region selector list is build-generated, not hardcoded
 5. `bundle-sdk.js` bundles `CloudWatchClient + GetMetricDataCommand` and `ServiceQuotasClient + GetServiceQuotaCommand` into `site/aws-sdk.js`
 
 ### Runtime
@@ -123,7 +126,7 @@ Live at **https://tgpadua.github.io/aws-bedrock-quota-dashboard/** via GitHub Pa
 ## What NOT to Do
 
 - Do not add `data/` files to git — they are re-generated each build
-- The generated `site/` artifacts (`models.js`, `aws-sdk.js`, `version.js`, `help.png`) ARE committed — the Pages workflow deploys committed assets and does not rebuild. Run the build locally, then commit them.
+- The generated `site/` artifacts (`models.js`, `regions.js`, `aws-sdk.js`, `version.js`, `help.png`) ARE committed — the Pages workflow deploys committed assets and does not rebuild. Run the build locally, then commit them.
 - Do not add new npm dependencies to the frontend — use `window.AWSClients` from the bundle or plain browser APIs
 - Do not call `bedrock:ListFoundationModels` or `bedrock:ListInferenceProfiles` at runtime — the model catalogue is static, built at build time
 - Do not use `AWS.` (v2 SDK global) anywhere — the project is fully on v3

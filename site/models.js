@@ -214,6 +214,11 @@ const MODEL_CATALOGUE = [
         "quotaCode": "L-7AB4ABDD"
       },
       {
+        "id": "us.anthropic.claude-haiku-5-5",
+        "type": "Cross-Region",
+        "quotaCode": "L-47520EB7"
+      },
+      {
         "id": "global.anthropic.claude-haiku-5-5",
         "type": "Global",
         "quotaCode": "L-F26CA8D1"
@@ -319,6 +324,11 @@ const MODEL_CATALOGUE = [
         "id": "us.anthropic.claude-opus-5-5",
         "type": "Cross-Region",
         "quotaCode": "L-A4430697"
+      },
+      {
+        "id": "global.anthropic.claude-opus-5-5",
+        "type": "Global",
+        "quotaCode": "L-A103A344"
       }
     ]
   },
@@ -812,6 +822,22 @@ const MODEL_CATALOGUE = [
     ]
   },
   {
+    "name": "Moonshot AI Kimi K3",
+    "vendor": "Moonshot AI",
+    "ids": [
+      {
+        "id": "us.moonshotai.kimi-k3",
+        "type": "Cross-Region",
+        "quotaCode": "L-51FF35D5"
+      },
+      {
+        "id": "global.moonshotai.kimi-k3",
+        "type": "Global",
+        "quotaCode": "L-2B5A3FA2"
+      }
+    ]
+  },
+  {
     "name": "NVIDIA Nemotron Nano 3 30B",
     "vendor": "NVIDIA",
     "ids": [
@@ -916,6 +942,22 @@ const MODEL_CATALOGUE = [
         "id": "global.openai.gpt-6-astra",
         "type": "Global",
         "quotaCode": "L-B38B530A"
+      }
+    ]
+  },
+  {
+    "name": "OpenAI GPT-6 Luna",
+    "vendor": "OpenAI",
+    "ids": [
+      {
+        "id": "us.openai.gpt-6-luna",
+        "type": "Cross-Region",
+        "quotaCode": "L-AB39D760"
+      },
+      {
+        "id": "global.openai.gpt-6-luna",
+        "type": "Global",
+        "quotaCode": "L-CCC92354"
       }
     ]
   },

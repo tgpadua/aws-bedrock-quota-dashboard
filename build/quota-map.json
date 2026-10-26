@@ -489,7 +489,8 @@
     },
     "anthropic.claude-haiku-5-5": {
         "On-Demand": "L-7AB4ABDD",
-        "Global": "L-F26CA8D1"
+        "Global": "L-F26CA8D1",
+        "Cross-Region": "L-47520EB7"
     },
     "twelvelabs.pegasus-1-5-v1:0": {
         "On-Demand": null,
@@ -517,7 +518,9 @@
         "Cross-Region": "L-8FD128CF"
     },
     "openai.gpt-6-luna": {
-        "On-Demand": null
+        "On-Demand": null,
+        "Global": "L-CCC92354",
+        "Cross-Region": "L-AB39D760"
     },
     "anthropic.claude-fable-5-1": {
         "On-Demand": null,
@@ -544,15 +547,18 @@
     },
     "anthropic.claude-opus-5-5": {
         "Cross-Region": "L-A4430697",
-        "On-Demand": null
+        "On-Demand": null,
+        "Global": "L-A103A344"
     },
     "openai.gpt-5.4": {
         "Global": null,
-        "On-Demand": null
+        "On-Demand": null,
+        "Cross-Region": null
     },
     "openai.gpt-5.5": {
         "Cross-Region": null,
-        "Global": null
+        "Global": null,
+        "On-Demand": null
     },
     "zai.glm-5.3": {
         "Cross-Region": "L-4A544964",
@@ -560,6 +566,8 @@
         "On-Demand": "L-99316427"
     },
     "moonshotai.kimi-k3": {
-        "On-Demand": null
+        "On-Demand": null,
+        "Global": "L-2B5A3FA2",
+        "Cross-Region": "L-51FF35D5"
     }
 }
